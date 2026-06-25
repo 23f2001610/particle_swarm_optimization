@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 np.random.seed(42)
 
 # =========================
@@ -52,6 +53,8 @@ def fitness(particle):
         return 1e30
 
     sensors = get_sensor_positions(NSENSORS, S, R)
+    x = sensors[0]
+    y = sensors[1]
 
     # ---- IMPORTANT: YOU MUST SET BIRD POSITION ----
     bird = np.array([1.4094e-3, 4.3134e-3])  # change if needed
@@ -139,8 +142,65 @@ for it in range(iters):
 # =========================
 # RESULT
 # =========================
+R = gbest[0]
+S = gbest[1]
 
+sensors = get_sensor_positions(NSENSORS, S, R)
+
+for i in range(NSENSORS):
+    print(
+        f"Sensor {i+1}: "
+        f"x = {sensors[0,i]*1000:.4f} mm, "
+        f"y = {sensors[1,i]*1000:.4f} mm"
+    )
 print("\nRecovered Parameters")
 print("--------------------")
 print("Radius  =", gbest[0]*1000, "mm")
 print("Spacing =", gbest[1]*1000, "mm")
+R = gbest[0]
+S = gbest[1]
+
+
+
+
+
+bird = np.array([1.4094e-3, 4.3134e-3])
+
+plt.figure(figsize=(7,7))
+
+# Sensors
+plt.plot(
+    sensors[0]*1000,
+    sensors[1]*1000,
+    'ro',
+    markersize=8,
+    label='Sensors'
+)
+
+# Bird
+plt.plot(
+    bird[0]*1000,
+    bird[1]*1000,
+    'b*',
+    markersize=15,
+    label='Bird'
+)
+
+# Optional: sensor numbers
+for i in range(NSENSORS):
+    plt.text(
+        sensors[0,i]*1000,
+        sensors[1,i]*1000,
+        str(i+1),
+        fontsize=8
+    )
+
+plt.xlabel("x (mm)")
+plt.ylabel("y (mm)")
+plt.title("Sensor Array and Bird Location")
+
+plt.grid(True)
+plt.axis('equal')
+plt.legend()
+
+plt.show()
